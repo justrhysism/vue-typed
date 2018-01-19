@@ -1,6 +1,6 @@
 import { Component, Prop, GlobalMixin, Virtual } from '../../../dist/index'
 import { expect } from 'chai'
-import * as Vue from 'vue'
+const Vue = require('vue'); // Because we need to CJS module
 
 
 describe('global mixins', () => {
@@ -45,7 +45,6 @@ describe('global mixins', () => {
 		expect(globalMethodInvoked).eq(true)
 		expect(c['$options']['data']()).to.have.property('globalData').that.equals('global data')
 		expect(c['$options']['props']).to.have.property('globalProp').have.property('default').that.equals('global prop')
-
 	})
 
 })

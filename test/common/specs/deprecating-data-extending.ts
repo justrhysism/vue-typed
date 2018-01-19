@@ -1,7 +1,8 @@
 import { Component, Prop, Watch } from '../../../dist/index'
 import { expect } from 'chai'
-import * as Vue from 'vue'
 import { getDataOptionsValue } from '../utils';
+//import Vue from 'vue';
+const Vue = require('vue'); // Because we need to CJS module
 
 describe('deprecating data extending test', () => {
 
@@ -19,7 +20,7 @@ describe('deprecating data extending test', () => {
 
 	})
 
-	it('should not conflit with methods', () => {
+	it('should not conflict with methods', () => {
 
 		@Component()
 		class Base extends Vue {
@@ -93,7 +94,7 @@ describe('deprecating data extending test', () => {
 
 		@Component()
 		class Base extends Vue {
-			
+
 			get msg() {
 				return this.data1;
 			}
@@ -103,7 +104,7 @@ describe('deprecating data extending test', () => {
 			}
 
 			data1: string = 'hi'
-			
+
 		}
 
 		@Component() class App extends Base { }

@@ -1,13 +1,12 @@
-import * as Vue from 'vue'
-import { ComponentOptions } from 'vue/types/options';
+import Vue, { ComponentOptions } from 'vue';
 import { BuildOptions } from './utils';
 
 /**
  * Build Vue component.
- * 
+ *
  * @export
- * @param {ComponentOptions<Vue>} [options] 
- * @returns {ClassDecorator} 
+ * @param {ComponentOptions<Vue>} [options]
+ * @returns {ClassDecorator}
  */
 export function Component(options?: ComponentOptions<Vue>): ClassDecorator {
 

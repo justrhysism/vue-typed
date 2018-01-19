@@ -1,7 +1,7 @@
 import { Component, Prop, Watch } from '../../../dist/index'
 import { expect } from 'chai'
-import * as Vue from 'vue'
 import { getDataOptionsValue } from '../utils';
+const Vue = require('vue'); // Because we need to CJS module
 
 describe('deprecating data test', () => {
 

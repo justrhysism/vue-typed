@@ -1,6 +1,6 @@
 import { Component } from '../../../dist/index'
 import { expect } from 'chai'
-import * as Vue from 'vue'
+import Vue from 'vue'
 
 describe('methods and computed', () => {
 	it('should take normal methods and getter setter', (done) => {
@@ -24,7 +24,7 @@ describe('methods and computed', () => {
 				return this.val + 1;
 			}
 		}
-		
+
 		var vm = (new Foo())['$mount']();
 
 

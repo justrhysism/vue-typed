@@ -1,4 +1,4 @@
-import { PropOptions } from 'vue/types/options';
+import { PropOptions } from 'vue';
 import { PROP_KEY } from "./utils";
 
 /**

@@ -1,6 +1,7 @@
 import { Component, Prop, Mixin, Mixins, Options, Virtual } from '../../../dist/index'
 import { expect } from 'chai'
-import * as Vue from 'vue'
+import VueType from 'vue';
+const Vue = require('vue'); // Because we need to CJS module
 
 
 describe('mixins', () => {
@@ -119,7 +120,7 @@ describe('mixins', () => {
 		let mixinMethodCalled = false
 
 		@Options()
-		class MyMixin extends Virtual<Vue>() {
+		class MyMixin extends Virtual<VueType>() {
 
 			mixinData = 'data from mixin'
 
@@ -137,7 +138,7 @@ describe('mixins', () => {
 
 		@Component()
 		class Container extends Mixin(MyMixin) {
-			created() {				
+			created() {
 				this.mymix()
 			}
 		}

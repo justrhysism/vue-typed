@@ -2,8 +2,7 @@
  * Internal utilities.
  */
 
-import * as Vue from 'vue'
-import { ComponentOptions } from "vue";
+import Vue, {ComponentOptions} from 'vue';
 
 let vueInternalPropNames = Object.getOwnPropertyNames(new Vue());
 let vueInternalHooks = [
@@ -20,29 +19,30 @@ let vueInternalHooks = [
 	'deactivated',
 	'beforeDestroy',
 	'destroyed',
-	'render'
-]
+	'render',
+	'errorCaptured' // 2.5
+];
 
 /** @internal */
-export const PROP_KEY = '$_vt_props'
+export const PROP_KEY = '$_vt_props';
 
 
 /** @internal */
-export function BuildOptions(Component: Function & ComponentOptions<Vue>, options?: any): <Function>(target: any) => Function | void {
+export function BuildOptions(Component: Function & ComponentOptions<Vue>, options?: any): ComponentOptions<Vue> {
 
 	// evaluate component name
 	if (!options) {
 		options = {}
 	}
-	options.name = options.name || Component.name
+	options.name = options.name || Component.name;
 
 
 	// class prototype.
-	let proto = Component.prototype
+	let proto = Component.prototype;
 
 	// avoid parent component initialization while building component
 	if (Object.getPrototypeOf(proto) instanceof Vue)
-		Object.setPrototypeOf(proto.constructor, function () { })
+		Object.setPrototypeOf(proto.constructor, function () { });
 
 	let constructor = new proto.constructor();
 
@@ -55,19 +55,19 @@ export function BuildOptions(Component: Function & ComponentOptions<Vue>, option
 	let propNames = undefined;
 	delete proto[PROP_KEY];
 	if (propAttrs) {
-		let props = {}
+		let props = {};
 
 		propNames = Object.getOwnPropertyNames(propAttrs);
 		for (let i = 0; i < propNames.length; i++) {
 			let prop = propNames[i];
 			let propVal = undefined;
-			let descriptor = Object.getOwnPropertyDescriptor(propAttrs, prop)
+			let descriptor = Object.getOwnPropertyDescriptor(propAttrs, prop) || {};
 			let constructorDefault = constructor[prop];
 
 			if (typeof (descriptor.value) === 'object') {
 
 				// prop options defined
-				propVal = descriptor.value
+				propVal = descriptor.value;
 
 				// try to assign default value
 				if (!propVal.default)
@@ -106,7 +106,7 @@ export function BuildOptions(Component: Function & ComponentOptions<Vue>, option
 	//
 	Object.getOwnPropertyNames(proto).forEach(function (key) {
 
-		// skip constructor     
+		// skip constructor
 		if (key === 'constructor') {
 			return
 		}
@@ -119,11 +119,11 @@ export function BuildOptions(Component: Function & ComponentOptions<Vue>, option
 		}
 
 
-		let descriptor = Object.getOwnPropertyDescriptor(proto, key)
+		let descriptor = Object.getOwnPropertyDescriptor(proto, key) || {};
 		if (typeof descriptor.value === 'function') {
 
 			// methods
-			(options.methods || (options.methods = {}))[key] = descriptor.value
+			(options.methods || (options.methods = {}))[key] = descriptor.value;
 
 
 		} else if (descriptor.get || descriptor.set) {
@@ -134,13 +134,13 @@ export function BuildOptions(Component: Function & ComponentOptions<Vue>, option
 				set: descriptor.set
 			}
 		}
-	})
+	});
 
 
 	//
 	// Build options.data
 	//
-	let dataNames: string[] = []
+	let dataNames: string[] = [];
 	let restrictedNames = vueInternalPropNames;
 	if (propNames) restrictedNames = restrictedNames.concat(propNames);
 
@@ -154,7 +154,7 @@ export function BuildOptions(Component: Function & ComponentOptions<Vue>, option
 	if (dataNames.length > 0) {
 
 		// evaluate parent data
-		let parentData: any = undefined
+		let parentData: any = undefined;
 		let parentDataType = typeof options.data;
 		if (parentDataType === 'function') {
 			parentData = options.data();
@@ -165,15 +165,15 @@ export function BuildOptions(Component: Function & ComponentOptions<Vue>, option
 		options.data = () => {
 
 			// define new data object
-			let data_obj = parentData || {}
+			let data_obj = parentData || {};
 
 			// set data default values initialized from constructor
 			dataNames.forEach(function (prop) {
-				let descriptor = Object.getOwnPropertyDescriptor(constructor, prop)
+				let descriptor = Object.getOwnPropertyDescriptor(constructor, prop) || {};
 				if (!descriptor.get && !descriptor.set && typeof descriptor.value !== 'function') {
 					data_obj[prop] = constructor[prop]
 				}
-			})
+			});
 
 			return data_obj
 		}

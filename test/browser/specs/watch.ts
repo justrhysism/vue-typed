@@ -1,6 +1,6 @@
 import { Component, Watch } from '../../../dist/index';
 import { expect } from 'chai';
-import * as Vue from 'vue';
+import Vue from 'vue';
 
 
 describe('watch decorator', () => {
@@ -46,10 +46,10 @@ describe('watch decorator', () => {
 				this.info = oldValue + ' -> ' + newValue;
 			}
 		}
-		
+
 		var vm = (new Watcher())['$mount']();
-		
-		
+
+
 		vm['$el'].querySelector('#btn1').click();
 		Vue.nextTick(()=>{
 			expect(vm['$el'].querySelector('#result').textContent, 'observe data 1').to.contain('Hello! -> Hola!');
@@ -99,7 +99,7 @@ describe('watch decorator', () => {
 			}
 
 			changeData2() {
-				this.data.push(new Foo('Hola!'));				
+				this.data.push(new Foo('Hola!'));
 			}
 
 			@Watch('data', true)
@@ -107,10 +107,10 @@ describe('watch decorator', () => {
 				this.info = newValue[newValue.length - 1].title + ' - ' + newValue.length;
 			}
 		}
-		
+
 		var vm = (new Watcher())['$mount']();
-		
-		
+
+
 		vm['$el'].querySelector('#btn1').click();
 		Vue.nextTick(()=>{
 			expect(vm['$el'].querySelector('#result').textContent, 'observe data 1').to.contain('Hi! - 1');
@@ -127,7 +127,7 @@ describe('watch decorator', () => {
 
 	});
 
-	
+
 
 
 });
